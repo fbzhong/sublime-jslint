@@ -1,0 +1,10 @@
+[
+    {
+        "caption": "JSLint: Run JSLint",
+        "command": "jslint"
+    },
+    {
+        "caption": "JSLint: Show JSLint Result",
+        "command": "show_jslint_result"
+    }
+]

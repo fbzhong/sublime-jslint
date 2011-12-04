@@ -1,0 +1,23 @@
+[
+    {
+        "id": "tools",
+        "children":
+        [
+            {
+                "caption": "Lint",
+                "id": "lint",
+                "children":
+                [
+                    {
+                        "caption": "Run JSLint",
+                        "command": "jslint"
+                    },
+                    {
+                        "caption": "Show JSLint Result",
+                        "command": "show_jslint_result"
+                    }
+                ]
+            }
+        ]
+    }
+]
