@@ -23,6 +23,17 @@ Requirements
 
 - java, and make sure java has been added to PATH
 
+Installation
+-------------
+
+- Using Package Control http://wbond.net/sublime_packages/package_control
+    > Add Repository: https://github.com/fbzhong/sublime-jslint
+
+- Download and extract to Sublime Text 2 Packages folder
+    > Windows:  %APPDATA%\Sublime Text 2\Packages
+    > Mac OS X: ~/Library/Application Support/Sublime Text 2/Packages
+    > Linux:    ~/.config/sublime-text-2/Packages
+
 How to use?
 -------------
 
