@@ -16,6 +16,8 @@ Features
 
 - Highlight error line by click on the result view
 
+- Cross platform: support Windows, Linux and Mac OS X
+
 Requirements
 -------------
 
