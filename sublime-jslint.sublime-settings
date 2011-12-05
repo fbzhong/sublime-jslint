@@ -1,0 +1,11 @@
+{
+    // Path to the jslint jar.
+    // Leave blank to use bundled jar.
+    "jslint_jar": "",
+
+    // Options pass to jslint.
+    "jslint_options": "",
+
+    // debug flag.
+    "debug": false
+}

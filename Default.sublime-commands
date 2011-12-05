@@ -6,5 +6,19 @@
     {
         "caption": "JSLint: Show JSLint Result",
         "command": "show_jslint_result"
+    },
+    {
+        "caption": "Preferences: JSLint Settings – Default",
+        "command": "open_file", "args":
+        {
+            "file": "${packages}/sublime-jslint/sublime-jslint.sublime-settings"
+        }
+    },
+    {
+        "caption": "Preferences: JSLint Settings – User",
+        "command": "open_file", "args":
+        {
+            "file": "${packages}/User/sublime-jslint.sublime-settings"
+        }
     }
 ]

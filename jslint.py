@@ -6,6 +6,7 @@ from statusprocess import *
 from asyncprocess import *
 
 RESULT_VIEW_NAME = 'jslint_result_view'
+SETTINGS_FILE = "sublime-jslint.sublime-settings"
 
 class ShowJslintResultCommand(sublime_plugin.WindowCommand):
   """show jslint result"""
@@ -14,9 +15,20 @@ class ShowJslintResultCommand(sublime_plugin.WindowCommand):
 
 class JslintCommand(sublime_plugin.WindowCommand):
   def run(self):
+    s = sublime.load_settings(SETTINGS_FILE)
+
     file_path = self.window.active_view().file_name()
     file_name = os.path.basename(file_path)
-    cmd = 'java -jar "' + sublime.packages_path() + '/sublime-jslint/jslint4java-2.0.1.jar" "' + file_path + '"'
+
+    if len(s.get('jslint_jar', '')) > 0:
+      jslint_jar = s.get('jslint_jar')
+    else:
+      jslint_jar = sublime.packages_path() + '/sublime-jslint/jslint4java-2.0.1.jar'
+
+    cmd = 'java -jar "' + jslint_jar + '" ' + s.get('jslint_options', '') + ' "' + file_path + '"'
+
+    if s.get('debug', False) == True:
+      print "DEBUG: " + str(cmd)
 
     self.buffered_data = ''
     self.file_path = file_path
@@ -67,7 +79,7 @@ class JslintCommand(sublime_plugin.WindowCommand):
     selection_was_at_end = (len(self.output_view.sel()) == 1 and self.output_view.sel()[0] == sublime.Region(self.output_view.size()))
     self.output_view.set_read_only(False)
     edit = self.output_view.begin_edit()
-    self.output_view.insert(edit, self.output_view.size(), str.strip())
+    self.output_view.insert(edit, self.output_view.size(), str)
     if selection_was_at_end:
       self.output_view.show(self.output_view.size())
     self.output_view.end_edit(edit)
@@ -100,7 +112,9 @@ class JsLintEventListener(sublime_plugin.EventListener):
     if view.name() != RESULT_VIEW_NAME:
       return
     self.previous_resion = None
-    self.file_view.erase_regions(RESULT_VIEW_NAME)
+
+    if self.file_view:
+      self.file_view.erase_regions(RESULT_VIEW_NAME)
 
   def on_selection_modified(self, view):
     if JsLintEventListener.disabled:
