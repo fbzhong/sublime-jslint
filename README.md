@@ -54,6 +54,24 @@ Settings
 
 Settings can be opened via the Command Palette, or the Preferences > Package Settings > JSLint > Settings – User menu entry.
 
+    {
+        // Path to the jslint jar.
+        // Leave blank to use bundled jar.
+        "jslint_jar": "",
+
+        // Options pass to jslint.
+        "jslint_options": "",
+
+        // Ignore errors, regex.
+        "ignore_errors":
+        [
+            // "Expected an identifier and instead saw 'undefined' \(a reserved word\)"
+        ],
+
+        // debug flag.
+        "debug": false
+    }
+
 License
 -------------
 
