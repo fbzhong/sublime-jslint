@@ -111,8 +111,8 @@ class JslintCommand(sublime_plugin.WindowCommand):
     self.output_view.end_edit(edit)
     self.output_view.set_read_only(True)
 
-    if end:
-      self.output_view.run_command("goto_line", {"line": 1})
+    # if end:
+    #   self.output_view.run_command("goto_line", {"line": 1})
 
   def update_status(self, msg, progress):
     sublime.status_message(msg + " " + progress)
