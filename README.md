@@ -49,6 +49,11 @@ Screenshots
 
 ![](https://github.com/fbzhong/sublime-jslint/raw/master/images/screenshot.png)
 
+Settings
+-------------
+
+Settings can be opened via the Command Palette, or the Preferences > Package Settings > JSLint > Settings – User menu entry.
+
 License
 -------------
 
