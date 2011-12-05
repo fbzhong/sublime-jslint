@@ -20,23 +20,25 @@ class JslintCommand(sublime_plugin.WindowCommand):
     file_path = self.window.active_view().file_name()
     file_name = os.path.basename(file_path)
 
-    if len(s.get('jslint_jar', '')) > 0:
-      jslint_jar = s.get('jslint_jar')
-    else:
-      jslint_jar = sublime.packages_path() + '/sublime-jslint/jslint4java-2.0.1.jar'
-
-    cmd = 'java -jar "' + jslint_jar + '" ' + s.get('jslint_options', '') + ' "' + file_path + '"'
-
-    if s.get('debug', False) == True:
-      print "DEBUG: " + str(cmd)
-
+    self.debug = s.get('debug', False)
     self.buffered_data = ''
     self.file_path = file_path
     self.file_name = file_name
     self.is_running = True
     self.tests_panel_showed = False
+    self.ignored_error_count = 0
+    self.ignore_errors = s.get('ignore_errors', [])
 
     self.init_tests_panel()
+
+    if len(s.get('jslint_jar', '')) > 0:
+      jslint_jar = s.get('jslint_jar')
+    else:
+      jslint_jar = sublime.packages_path() + '/sublime-jslint/jslint4java-2.0.1.jar'
+    cmd = 'java -jar "' + jslint_jar + '" ' + s.get('jslint_options', '') + ' "' + file_path + '"'
+
+    if self.debug:
+      print "DEBUG: " + str(cmd)
 
     AsyncProcess(cmd, self)
     StatusProcess('Starting JSLint for file ' + file_name, self)
@@ -63,29 +65,53 @@ class JslintCommand(sublime_plugin.WindowCommand):
     self.output_view.end_edit(edit)
     self.output_view.set_read_only(True)
 
-  def append_data(self, proc, data, flush=False):
+  def append_data(self, proc, data, end=False):
     self.buffered_data = self.buffered_data + data.decode("utf-8")
-    str = self.buffered_data.replace(self.file_path, self.file_name).replace('\r\n', '\n').replace('\r', '\n')
+    data = self.buffered_data.replace(self.file_path, self.file_name).replace('\r\n', '\n').replace('\r', '\n')
 
-    if flush == False:
-      rsep_pos = str.rfind('\n')
+    if end == False:
+      rsep_pos = data.rfind('\n')
       if rsep_pos == -1:
         # not found full line.
         return
-      self.buffered_data = str[rsep_pos+1:]
-      str = str[:rsep_pos+1]
+      self.buffered_data = data[rsep_pos+1:]
+      data = data[:rsep_pos+1]
+
+    # ignore error.
+    text = data
+    if len(self.ignore_errors) > 0:
+      text = ''
+      for line in data.split('\n'):
+        if len(line) == 0:
+          continue
+        for rule in self.ignore_errors:
+          if re.search(rule, line) == None:
+            text += line + '\n'
+          else:
+            self.ignored_error_count += 1
+            if self.debug:
+              print "text match line "
+              print "rule = " + rule
+              print "line = " + line
+              print "---------"
+
 
     self.show_tests_panel()
     selection_was_at_end = (len(self.output_view.sel()) == 1 and self.output_view.sel()[0] == sublime.Region(self.output_view.size()))
     self.output_view.set_read_only(False)
     edit = self.output_view.begin_edit()
-    self.output_view.insert(edit, self.output_view.size(), str)
-    if selection_was_at_end:
-      self.output_view.show(self.output_view.size())
+    self.output_view.insert(edit, self.output_view.size(), text)
+
+    if end:
+      text = '\njslint: ignored ' + str(self.ignored_error_count) + ' errors.\n'
+      self.output_view.insert(edit, self.output_view.size(), text)
+
+    # if selection_was_at_end:
+    #   self.output_view.show(self.output_view.size())
     self.output_view.end_edit(edit)
     self.output_view.set_read_only(True)
 
-    if flush:
+    if end:
       self.output_view.run_command("goto_line", {"line": 1})
 
   def update_status(self, msg, progress):

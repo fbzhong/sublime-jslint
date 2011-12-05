@@ -6,6 +6,12 @@
     // Options pass to jslint.
     "jslint_options": "",
 
+    // Ignore errors, regex.
+    "ignore_errors":
+    [
+        // "Expected an identifier and instead saw 'undefined' \(a reserved word\)"
+    ],
+
     // debug flag.
     "debug": false
 }
