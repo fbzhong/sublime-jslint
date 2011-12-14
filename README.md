@@ -72,6 +72,8 @@ Settings can be opened via the Command Palette, or the Preferences > Package Set
         "debug": false
     }
 
+The available jslint_options: https://github.com/fbzhong/sublime-jslint/wiki/Available-jslint4java-options
+
 New BSD License
 -------------
 
