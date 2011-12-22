@@ -10,7 +10,7 @@ This project provide a plugin to add JSLint support for Sublime Text 2.
 Features
 -------------
 
-- JSLint: Run JSLint (ctrl+j)
+- JSLint: Run JSLint (ctrl+j), or run jslint on save
 
 - JSLint: Show JSLint Result
 
@@ -67,6 +67,9 @@ Settings can be opened via the Command Palette, or the Preferences > Package Set
         [
             // "Expected an identifier and instead saw 'undefined' \(a reserved word\)"
         ],
+
+        // run jslint on save.
+        "run_on_save": false,
 
         // debug flag.
         "debug": false

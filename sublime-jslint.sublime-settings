@@ -12,6 +12,9 @@
         // "Expected an identifier and instead saw 'undefined' \(a reserved word\)"
     ],
 
+    // run jslint on save.
+    "run_on_save": false,
+
     // debug flag.
     "debug": false
 }

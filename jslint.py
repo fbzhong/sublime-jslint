@@ -137,6 +137,17 @@ class JsLintEventListener(sublime_plugin.EventListener):
     self.previous_resion = None
     self.file_view = None
 
+  def on_post_save(self, view):
+    s = sublime.load_settings(SETTINGS_FILE)
+    if s.get('run_on_save', False) == False:
+      return
+
+    if view.file_name().endswith('.js') == False:
+      return
+
+    # run jslint.
+    sublime.active_window().run_command("jslint")
+
   def on_deactivated(self, view):
     if view.name() != RESULT_VIEW_NAME:
       return
