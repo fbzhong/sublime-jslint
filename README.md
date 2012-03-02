@@ -34,7 +34,7 @@ Installation
 
     > Windows:  %APPDATA%\Sublime Text 2\Packages
     
-    > Mac OS X: ~/Library/Application Support/Sublime Text 2/Packages
+    > Mac OS X: ~/Library/Application\ Support/Sublime\ Text\ 2/Packages/
     
     > Linux:    ~/.config/sublime-text-2/Packages
 
