@@ -1,7 +1,7 @@
-JSLint for Sublime Text 2 by node-jslint
+node-jslint for Sublime Text 2
 ========================
 
-This is fork of the project by Robin - "JSLint support for Sublime Text 2 by using jslint4java" (https://github.com/fbzhong/sublime-jslint).
+This project is a fork of Robin(fbzhong)’s - "JSLint support for Sublime Text 2 by using jslint4java" (https://github.com/fbzhong/sublime-jslint).
 
 Sublime Text 2 (http://www.sublimetext.com/2) is a sophisticated text editor for code, html and prose. You'll love the slick user interface and extraordinary features.
 
@@ -21,11 +21,15 @@ Features
 Requirements
 -------------
 
-- node-jslint need to be installed. 
+- node-jslint (https://github.com/reid/node-jslint) need to be installed. 
     > npm install -g jslint
 
 If you don't want use node-jslint you can the set 'use_node_jslint' in plugin settings to 'false' to use the packaged JSLint4Java jar.
 
+Why node-jslint instead of jslint4java?
+-------------
+
+Linting with node-jslint is much faster than jslint4java. Try for yourself.
 
 New BSD License
 -------------
