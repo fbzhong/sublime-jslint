@@ -166,6 +166,7 @@ class JsLintEventListener(sublime_plugin.EventListener):
     if view.name() != RESULT_VIEW_NAME:
       return
     region = view.line(view.sel()[0])
+    s = sublime.load_settings(SETTINGS_FILE)
 
     # make sure call once.
     if self.previous_resion == region:
@@ -173,11 +174,18 @@ class JsLintEventListener(sublime_plugin.EventListener):
     self.previous_resion = region
 
     # extract line from jslint result.
-    text = view.substr(region).split(':')
-    if len(text) < 4 or text[0] != 'jslint' or re.match('\d+', text[2]) == None or re.match('\d+', text[3]) == None:
-        return
-    line = int(text[2])
-    col = int(text[3])
+    if (s.get('use_node_jslint', False)):
+      pattern_position = ".\\/\\/ Line (\d), Pos (\d)$"
+      text = view.substr(region)
+      text = re.findall(pattern_position, text)
+      line = int(text[0][0])
+      col = int(text[0][1])
+    else:
+      text = view.substr(region).split(':')
+      if len(text) < 4 or text[0] != 'jslint' or re.match('\d+', text[2]) == None or re.match('\d+', text[3]) == None:
+          return
+      line = int(text[2])
+      col = int(text[3])
 
     # hightligh view line.
     view.add_regions(RESULT_VIEW_NAME, [region], "comment")
