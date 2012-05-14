@@ -1,9 +1,9 @@
-JSLint for Sublime Text 2 by node-jslint
+JSLint support for Sublime Text 2 by using jslint4java
 ========================
 
-This is fork of the project by Robin - "JSLint support for Sublime Text 2 by using jslint4java" (https://github.com/fbzhong/sublime-jslint).
-
 Sublime Text 2 (http://www.sublimetext.com/2) is a sophisticated text editor for code, html and prose. You'll love the slick user interface and extraordinary features.
+
+JSLint4Java (http://code.google.com/p/jslint4java/) is a java wrapper around the fabulous tool by Douglas Crockford, [jslint](http://jslint.com). It provides a simple interface for detecting potential problems in JavaScript code.
 
 This project provide a plugin to add JSLint support for Sublime Text 2.
 
@@ -21,11 +21,65 @@ Features
 Requirements
 -------------
 
-- node-jslint need to be installed. 
-    > npm install -g jslint
+- java, and make sure java has been added to PATH
 
-If you don't want use node-jslint you can the set 'use_node_jslint' in plugin settings to 'false' to use the packaged JSLint4Java jar.
+Installation
+-------------
 
+- Using Package Control http://wbond.net/sublime_packages/package_control
+
+    > Install Package: sublime-jslint
+
+- Download and extract to Sublime Text 2 Packages folder
+
+    > Windows:  %APPDATA%\Sublime Text 2\Packages
+    
+    > Mac OS X: ~/Library/Application\ Support/Sublime\ Text\ 2/Packages/
+    
+    > Linux:    ~/.config/sublime-text-2/Packages
+
+How to use?
+-------------
+
+- Using the Command Palette (Windows and Linux: Ctrl+Shift+P, OSX: Command+Shift+P) then search for:
+
+    - JSLint: Run JSLint (ctrl+j)
+    - JSLint: Show JSLint Result
+
+Open up a .js file and hit ctrl+j to run JSLint. An new output panel will appear giving you the JSLint results:
+
+Screenshots
+-------------
+
+![](https://github.com/fbzhong/sublime-jslint/raw/master/images/screenshot.png)
+
+Settings
+-------------
+
+Settings can be opened via the Command Palette, or the Preferences > Package Settings > JSLint > Settings – User menu entry.
+
+    {
+        // Path to the jslint jar.
+        // Leave blank to use bundled jar.
+        "jslint_jar": "",
+
+        // Options pass to jslint.
+        "jslint_options": "",
+
+        // Ignore errors, regex.
+        "ignore_errors":
+        [
+            // "Expected an identifier and instead saw 'undefined' \(a reserved word\)"
+        ],
+
+        // run jslint on save.
+        "run_on_save": false,
+
+        // debug flag.
+        "debug": false
+    }
+
+The available jslint_options: https://github.com/fbzhong/sublime-jslint/wiki/Available-jslint4java-options
 
 New BSD License
 -------------
