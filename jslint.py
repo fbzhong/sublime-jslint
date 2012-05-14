@@ -28,14 +28,18 @@ class JslintCommand(sublime_plugin.WindowCommand):
     self.tests_panel_showed = False
     self.ignored_error_count = 0
     self.ignore_errors = s.get('ignore_errors', [])
+    self.use_node_jslint = s.get('use_node_jslint', False)
 
     self.init_tests_panel()
 
-    if len(s.get('jslint_jar', '')) > 0:
-      jslint_jar = s.get('jslint_jar')
+    if (self.use_node_jslint):
+      cmd = 'jslint ' + s.get('node_jslint_options', '') + ' "' + file_path + '"'
     else:
-      jslint_jar = sublime.packages_path() + '/sublime-jslint/jslint4java-2.0.1.jar'
-    cmd = 'java -jar "' + jslint_jar + '" ' + s.get('jslint_options', '') + ' "' + file_path + '"'
+      if len(s.get('jslint_jar', '')) > 0:
+        jslint_jar = s.get('jslint_jar')
+      else:
+        jslint_jar = sublime.packages_path() + '/sublime-jslint/jslint4java-2.0.1.jar'
+      cmd = 'java -jar "' + jslint_jar + '" ' + s.get('jslint_options', '') + ' "' + file_path + '"'
 
     if self.debug:
       print "DEBUG: " + str(cmd)
