@@ -83,7 +83,7 @@ class JslintCommand(sublime_plugin.WindowCommand):
 
     # ignore error.
     text = data
-    if len(self.ignore_errors) > 0:
+    if (len(self.ignore_errors) > 0) and (not self.use_node_jslint):
       text = ''
       for line in data.split('\n'):
         if len(line) == 0:
@@ -109,7 +109,7 @@ class JslintCommand(sublime_plugin.WindowCommand):
     edit = self.output_view.begin_edit()
     self.output_view.insert(edit, self.output_view.size(), text)
 
-    if end:
+    if end and not self.use_node_jslint:
       text = '\njslint: ignored ' + str(self.ignored_error_count) + ' errors.\n'
       self.output_view.insert(edit, self.output_view.size(), text)
 
