@@ -28,14 +28,18 @@ class JslintCommand(sublime_plugin.WindowCommand):
     self.tests_panel_showed = False
     self.ignored_error_count = 0
     self.ignore_errors = s.get('ignore_errors', [])
+    self.use_node_jslint = s.get('use_node_jslint', False)
 
     self.init_tests_panel()
 
-    if len(s.get('jslint_jar', '')) > 0:
-      jslint_jar = s.get('jslint_jar')
+    if (self.use_node_jslint):
+      cmd = 'jslint ' + s.get('node_jslint_options', '') + ' "' + file_path + '"'
     else:
-      jslint_jar = sublime.packages_path() + '/sublime-jslint/jslint4java-2.0.1.jar'
-    cmd = 'java -jar "' + jslint_jar + '" ' + s.get('jslint_options', '') + ' "' + file_path + '"'
+      if len(s.get('jslint_jar', '')) > 0:
+        jslint_jar = s.get('jslint_jar')
+      else:
+        jslint_jar = sublime.packages_path() + '/sublime-jslint/jslint4java-2.0.1.jar'
+      cmd = 'java -jar "' + jslint_jar + '" ' + s.get('jslint_options', '') + ' "' + file_path + '"'
 
     if self.debug:
       print "DEBUG: " + str(cmd)
@@ -79,7 +83,7 @@ class JslintCommand(sublime_plugin.WindowCommand):
 
     # ignore error.
     text = data
-    if len(self.ignore_errors) > 0:
+    if (len(self.ignore_errors) > 0) and (not self.use_node_jslint):
       text = ''
       for line in data.split('\n'):
         if len(line) == 0:
@@ -105,7 +109,7 @@ class JslintCommand(sublime_plugin.WindowCommand):
     edit = self.output_view.begin_edit()
     self.output_view.insert(edit, self.output_view.size(), text)
 
-    if end:
+    if end and not self.use_node_jslint:
       text = '\njslint: ignored ' + str(self.ignored_error_count) + ' errors.\n'
       self.output_view.insert(edit, self.output_view.size(), text)
 
@@ -162,6 +166,7 @@ class JsLintEventListener(sublime_plugin.EventListener):
     if view.name() != RESULT_VIEW_NAME:
       return
     region = view.line(view.sel()[0])
+    s = sublime.load_settings(SETTINGS_FILE)
 
     # make sure call once.
     if self.previous_resion == region:
@@ -169,11 +174,19 @@ class JsLintEventListener(sublime_plugin.EventListener):
     self.previous_resion = region
 
     # extract line from jslint result.
-    text = view.substr(region).split(':')
-    if len(text) < 4 or text[0] != 'jslint' or re.match('\d+', text[2]) == None or re.match('\d+', text[3]) == None:
-        return
-    line = int(text[2])
-    col = int(text[3])
+    if (s.get('use_node_jslint', False)):
+      pattern_position = "\\/\\/ Line (\d+), Pos (\d+)$"
+      text = view.substr(region)
+      text = re.findall(pattern_position, text)
+      if len(text) > 0:
+        line = int(text[0][0])
+        col = int(text[0][1])
+    else:
+      text = view.substr(region).split(':')
+      if len(text) < 4 or text[0] != 'jslint' or re.match('\d+', text[2]) == None or re.match('\d+', text[3]) == None:
+          return
+      line = int(text[2])
+      col = int(text[3])
 
     # hightligh view line.
     view.add_regions(RESULT_VIEW_NAME, [region], "comment")
