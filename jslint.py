@@ -38,7 +38,7 @@ class JslintCommand(sublime_plugin.WindowCommand):
       if len(s.get('jslint_jar', '')) > 0:
         jslint_jar = s.get('jslint_jar')
       else:
-        jslint_jar = sublime.packages_path() + '/sublime-jslint/jslint4java-2.0.1.jar'
+        jslint_jar = sublime.packages_path() + '/sublime-jslint/jslint4java-2.0.5-SNAPSHOT.jar'
       cmd = 'java -jar "' + jslint_jar + '" ' + s.get('jslint_options', '') + ' "' + file_path + '"'
 
     if self.debug:
