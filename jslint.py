@@ -184,7 +184,7 @@ class JsLintEventListener(sublime_plugin.EventListener):
         else:
             text = view.substr(region).split(':')
             if len(text) < 4 or text[0] != 'jslint' or re.match('\d+', text[2]) == None or re.match('\d+', text[3]) == None:
-                    return
+                return
             line = int(text[2])
             col = int(text[3])
 
