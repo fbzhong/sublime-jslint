@@ -88,4 +88,4 @@ All available jslint_options can be found [here](https://github.com/fbzhong/subl
 License
 -------
 
-sublime-jslint is released under the New  BSD License, which may be found [here](https://github.com/fbzhong/sublime-jslint/LICENSE.md).
+sublime-jslint is released under the New  BSD License, which may be found [here](https://github.com/fbzhong/sublime-jslint/blob/master/LICENSE.md).
