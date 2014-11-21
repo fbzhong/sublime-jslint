@@ -1,31 +1,30 @@
 {
-    // Uses system installed jslint.js (node.js based)
-    // instead of bundled jslint jar
+    //Uses system installed jslint.js (node.js based), instead of bundled JSLint jar
     "use_node_jslint": false,
 
-    // Path to the jslint.js
-    // Leave blank to use default jslint path
+    //Path to the jslint.js
+    //Leave blank to use default JSLint path
     "node_jslint_path": "",
 
-    // Options pass to jslint.js
+    //Options passed to jslint.js
     "node_jslint_options": "",
 
-    // Path to the jslint jar.
-    // Leave blank to use bundled jar.
+    //Path to the JSLint jar.
+    //Leave blank to use bundled jar.
     "jslint_jar": "",
 
-    // Options pass to jslint.
+    //Options passed to JSLint.
     "jslint_options": "",
 
-    // Ignore errors, regex.
+    //Errors and RegEx to be ignored
     "ignore_errors":
     [
-        // "Expected an identifier and instead saw 'undefined' \(a reserved word\)"
+        //"Expected an identifier and instead saw 'undefined' \(a reserved word\)"
     ],
 
-    // run jslint on save.
+    //Run JSLint on save.
     "run_on_save": false,
 
-    // debug flag.
+    //Debug flag.
     "debug": false
 }

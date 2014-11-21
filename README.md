@@ -1,111 +1,91 @@
 JSLint support for Sublime Text 2 by using jslint4java
-========================
+======================================================
 
-Sublime Text 2 (http://www.sublimetext.com/2) is a sophisticated text editor for code, html and prose. You'll love the slick user interface and extraordinary features.
+[Sublime Text 2](http://www.sublimetext.com/2) is a sophisticated text editor for code, HTML and prose. You'll love its slick user interface and extraordinary features.
 
-JSLint4Java (http://code.google.com/p/jslint4java/) is a java wrapper around the fabulous tool by Douglas Crockford, [jslint](http://jslint.com). It provides a simple interface for detecting potential problems in JavaScript code.
+[JSLint4Java](http://code.google.com/p/jslint4java/) is a Java wrapper around the fabulous tool by Douglas Crockford, [JSLint](http://jslint.com). It provides a simple interface for detecting potential problems in JavaScript code.
 
-This project provide a plugin to add JSLint support for Sublime Text 2.
+This project is a plugin to add JSLint support for Sublime Text 2.
 
 Features
--------------
+--------
 
-- JSLint: Run JSLint (ctrl+j), or run jslint on save
-
-- JSLint: Show JSLint Result
-
-- Highlight error line by click on the result view
-
-- Cross platform: support Windows, Linux and Mac OS X
+* JSLint: Run JSLint (Ctrl+J), or run JSLint on save
+* JSLint: Show JSLint results
+* Highlight error line by click in the result view
+* Cross-platform: supports Windows, Linux and Mac OS X
 
 Requirements
--------------
+------------
 
-- java, and make sure java has been added to PATH
+Java - also ensure that it has been added to PATH
 
 Installation
--------------
+------------
 
-- Using Package Control http://wbond.net/sublime_packages/package_control
-
-    > Install Package: sublime-jslint
-
-- Download and extract to Sublime Text 2 Packages folder
-
-    > Windows:  %APPDATA%\Sublime Text 2\Packages
-    
-    > Mac OS X: ~/Library/Application\ Support/Sublime\ Text\ 2/Packages/
-    
-    > Linux:    ~/.config/sublime-text-2/Packages
+* Using [Package Control](http://wbond.net/sublime_packages/package_control):
+    * Install Package: sublime-jslint
+* Download and extract to Sublime Text 2 Packages folder
+    * Windows: %APPDATA%\Sublime Text 2\Packages
+    * Mac OS X: ~/Library/Application\ Support/Sublime\ Text\ 2/Packages/
+    * Linux: ~/.config/sublime-text-2/Packages
 
 How to use?
--------------
+-----------
 
-- Using the Command Palette (Windows and Linux: Ctrl+Shift+P, OSX: Command+Shift+P) then search for:
+Open the Command Palette (Windows and Linux: Ctrl+Shift+P, OSX: Command+Shift+P), then search for:
 
-    - JSLint: Run JSLint (ctrl+j)
-    - JSLint: Show JSLint Result
+* JSLint: Run JSLint (Ctrl+J)
+* JSLint: Show JSLint Result
 
-Open up a .js file and hit ctrl+j to run JSLint. An new output panel will appear giving you the JSLint results:
+Open up a .js file and hit Ctrl+J to run JSLint. An new output panel will appear giving you the JSLint results:
 
 Screenshots
--------------
+-----------
 
 ![](https://github.com/fbzhong/sublime-jslint/raw/master/images/screenshot.png)
 
 Settings
--------------
+--------
 
-Settings can be opened via the Command Palette, or the Preferences > Package Settings > JSLint > Settings – User menu entry.
+Settings can be opened via the Command Palette, or via the Preferences/Package Settings/JSLint/Settings – User menu entry.
 
-    {
-        // Path to the jslint jar.
-        // Leave blank to use bundled jar.
-        "jslint_jar": "",
+```JSON
+{
+    //Uses system installed jslint.js (node.js based), instead of bundled JSLint jar
+    "use_node_jslint": false,
 
-        // Options pass to jslint.
-        "jslint_options": "",
+    //Path to the jslint.js
+    //Leave blank to use default JSLint path
+    "node_jslint_path": "",
 
-        // Ignore errors, regex.
-        "ignore_errors":
-        [
-            // "Expected an identifier and instead saw 'undefined' \(a reserved word\)"
-        ],
+    //Options passed to jslint.js
+    "node_jslint_options": "",
 
-        // run jslint on save.
-        "run_on_save": false,
+    //Path to the JSLint jar.
+    //Leave blank to use bundled jar.
+    "jslint_jar": "",
 
-        // debug flag.
-        "debug": false
-    }
+    //Options passed to JSLint.
+    "jslint_options": "",
 
-The available jslint_options: https://github.com/fbzhong/sublime-jslint/wiki/Available-jslint4java-options
+    //Errors and RegEx to be ignored
+    "ignore_errors":
+    [
+        //"Expected an identifier and instead saw 'undefined' \(a reserved word\)"
+    ],
 
-New BSD License
--------------
+    //Run JSLint on save.
+    "run_on_save": false,
 
-Copyright (c) 2011, Robin Zhong <fbzhong@gmail.com>
-All rights reserved.
+    //Debug flag.
+    "debug": false
+}
+```
 
-Redistribution and use in source and binary forms, with or without
-modification, are permitted provided that the following conditions are met:
+All available jslint_options can be found [here](https://github.com/fbzhong/sublime-jslint/wiki/Available-jslint4java-options).
 
-    * Redistributions of source code must retain the above copyright
-      notice, this list of conditions and the following disclaimer.
-    * Redistributions in binary form must reproduce the above copyright
-      notice, this list of conditions and the following disclaimer in the
-      documentation and/or other materials provided with the distribution.
-    * Neither the name of the Robin Zhong nor the
-      names of its contributors may be used to endorse or promote products
-      derived from this software without specific prior written permission.
+License
+-------
 
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
-ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
-WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-DISCLAIMED. IN NO EVENT SHALL <COPYRIGHT HOLDER> BE LIABLE FOR ANY
-DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
-(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
-ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+sublime-jslint is released under the New  BSD License, which may be found [here](https://github.com/fbzhong/sublime-jslint/LICENSE.md).
