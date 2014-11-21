@@ -50,7 +50,7 @@ Settings
 
 Settings can be opened via the Command Palette, or via the Preferences/Package Settings/JSLint/Settings – User menu entry.
 
-```JSON
+```javascript
 {
     //Uses system installed jslint.js (node.js based), instead of bundled JSLint jar
     "use_node_jslint": false,
