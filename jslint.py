@@ -2,16 +2,24 @@ import os
 import re
 import sublime
 import sublime_plugin
-from statusprocess import *
-from asyncprocess import *
+try:
+    from edit_buffer import *
+    from statusprocess import *
+    from asyncprocess import *
+except ImportError:
+    from .edit_buffer import *
+    from .statusprocess import *
+    from .asyncprocess import *
 
 RESULT_VIEW_NAME = 'jslint_result_view'
 SETTINGS_FILE = "sublime-jslint.sublime-settings"
 
+
 class ShowJslintResultCommand(sublime_plugin.WindowCommand):
     """show jslint result"""
     def run(self):
-        self.window.run_command("show_panel", {"panel": "output."+RESULT_VIEW_NAME})
+        self.window.run_command("show_panel", {"panel": "output." + RESULT_VIEW_NAME})
+
 
 class JslintCommand(sublime_plugin.WindowCommand):
     def run(self):
@@ -41,9 +49,6 @@ class JslintCommand(sublime_plugin.WindowCommand):
                 jslint_jar = sublime.packages_path() + '/sublime-jslint/jslint4java-2.0.5-SNAPSHOT.jar'
             cmd = 'java -jar "' + jslint_jar + '" ' + s.get('jslint_options', '') + ' "' + file_path + '"'
 
-        if self.debug:
-            print "DEBUG: " + str(cmd)
-
         AsyncProcess(cmd, self)
         StatusProcess('Starting JSLint for file ' + file_name, self)
 
@@ -63,17 +68,19 @@ class JslintCommand(sublime_plugin.WindowCommand):
         self.tests_panel_showed = True
 
     def clear_test_view(self):
-        self.output_view.set_read_only(False)
-        edit = self.output_view.begin_edit()
-        self.output_view.erase(edit, sublime.Region(0, self.output_view.size()))
-        self.output_view.end_edit(edit)
-        self.output_view.set_read_only(True)
+        with Edit(self.output_view, True) as edit:
+            edit.erase(sublime.Region(0, self.output_view.size()))
 
-    def append_data(self, proc, data, end=False):
-        self.buffered_data = self.buffered_data + data.decode("utf-8")
+    def append_data(self, proc, bData, end=False):
+        if self.debug:
+            print("DEBUG: append_data start")
+        data = bData.decode('utf-8')
+        if self.debug:
+            print("DEBUG: data= "+data)
+        self.buffered_data = self.buffered_data + data
         data = self.buffered_data.replace(self.file_path, self.file_name).replace('\r\n', '\n').replace('\r', '\n')
 
-        if end == False:
+        if end is False:
             rsep_pos = data.rfind('\n')
             if rsep_pos == -1:
                 # not found full line.
@@ -94,32 +101,23 @@ class JslintCommand(sublime_plugin.WindowCommand):
                         ignored = True
                         self.ignored_error_count += 1
                         if self.debug:
-                            print "text match line "
-                            print "rule = " + rule
-                            print "line = " + line
-                            print "---------"
+                            print("text match line ")
+                            print("rule = " + rule)
+                            print("line = " + line)
+                            print("---------")
                         break
-                if ignored == False:
+                if ignored is False:
                     text += line + '\n'
-
 
         self.show_tests_panel()
         selection_was_at_end = (len(self.output_view.sel()) == 1 and self.output_view.sel()[0] == sublime.Region(self.output_view.size()))
-        self.output_view.set_read_only(False)
-        edit = self.output_view.begin_edit()
-        self.output_view.insert(edit, self.output_view.size(), text)
+        with Edit(self.output_view, True) as edit:
+            edit.insert(self.output_view.size(), text)
 
         if end and not self.use_node_jslint:
-            text = '\njslint: ignored ' + str(self.ignored_error_count) + ' errors.\n'
-            self.output_view.insert(edit, self.output_view.size(), text)
-
-        # if selection_was_at_end:
-        #   self.output_view.show(self.output_view.size())
-        self.output_view.end_edit(edit)
-        self.output_view.set_read_only(True)
-
-        # if end:
-        #   self.output_view.run_command("goto_line", {"line": 1})
+            text = '\njslint: ignored ' + str(self.ignored_error_count) + ' errors.\n\n'
+            with Edit(self.output_view, True) as edit:
+                edit.insert(0, text)
 
     def update_status(self, msg, progress):
         sublime.status_message(msg + " " + progress)
@@ -129,7 +127,7 @@ class JslintCommand(sublime_plugin.WindowCommand):
             msg = self.file_name + ' lint free!'
         else:
             msg = ''
-        self.append_data(proc, msg, True)
+        self.append_data(proc, msg.encode('utf-8'), True)
 
         JsLintEventListener.disabled = False
 
@@ -137,16 +135,17 @@ class JslintCommand(sublime_plugin.WindowCommand):
 class JsLintEventListener(sublime_plugin.EventListener):
     """jslint event"""
     disabled = False
+
     def __init__(self):
         self.previous_resion = None
         self.file_view = None
 
     def on_post_save(self, view):
         s = sublime.load_settings(SETTINGS_FILE)
-        if s.get('run_on_save', False) == False:
+        if s.get('run_on_save', False) is False:
             return
 
-        if view.file_name().endswith('.js') == False:
+        if view.file_name().endswith('.js') is False:
             return
 
         # run jslint.
@@ -183,8 +182,8 @@ class JsLintEventListener(sublime_plugin.EventListener):
                 col = int(text[0][1])
         else:
             text = view.substr(region).split(':')
-            if len(text) < 4 or text[0] != 'jslint' or re.match('\d+', text[2]) == None or re.match('\d+', text[3]) == None:
-                return
+            if len(text) < 4 or text[0] != 'jslint' or re.match('\d+', text[2]) is None or re.match('\d+', text[3]) is None:
+                    return
             line = int(text[2])
             col = int(text[3])
 
@@ -199,7 +198,7 @@ class JsLintEventListener(sublime_plugin.EventListener):
             if v.file_name() == file_path:
                 file_view = v
                 break
-        if file_view == None:
+        if file_view is None:
             return
 
         self.file_view = file_view
