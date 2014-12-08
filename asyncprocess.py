@@ -13,19 +13,29 @@ class AsyncProcess(object):
     def __init__(self, cmd, listener):
         self.cmd = cmd
         self.listener = listener
+        #print("DEBUG_EXEC: " + str(self.cmd))
         self.proc = subprocess.Popen(self.cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        print("DEBUG_EXEC: " + str(self.cmd))
 
-        if self.proc.stdout:
-            self.stdoutThread = threading.Thread(target=self.read_stdout)
-            self.stdoutThread.start()
+        try:
+            if self.proc.stdout:
+                thread.start_new_thread(self.read_stdout, ())
 
-        if self.proc.stderr:
-            self.stderrThread = threading.Thread(target=self.read_stderr)
-            self.stderrThread.start()
+            if self.proc.stderr:
+                thread.start_new_thread(self.read_stderr, ())
 
-        self.pollThread = threading.Thread(target=self.poll)
-        self.pollThread.start()
+            thread.start_new_thread(self.poll, ())
+        except NameError:
+            if self.proc.stdout:
+                self.stdoutThread = threading.Thread(target=self.read_stdout)
+                self.stdoutThread.start()
+
+            if self.proc.stderr:
+                self.stderrThread = threading.Thread(target=self.read_stderr)
+                self.stderrThread.start()
+
+            self.pollThread = threading.Thread(target=self.poll)
+            self.pollThread.start()
+        
 
     def poll(self):
         while True:
